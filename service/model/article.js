@@ -25,8 +25,15 @@ class Article {
         return res
     }
 
+    //获取归档
     async getArchive() {
         const res = await get('blog/article/archive')
+        return res
+    }
+
+    // 获取所有精选文章
+    async getStarArticles() {
+        const res = await get('blog/article/star/articles')
         return res
     }
 }

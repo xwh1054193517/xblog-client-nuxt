@@ -9,10 +9,10 @@
         <div class="article-container py-4">
           <article-header :total="total"></article-header>
           <article-item v-for="(item,index) in articleList"
-                        :article=item
+                        :article=item 
                         :key=index></article-item>
           <div class="pagination flex justify-center items-center">
-            <a-pagination :default-current="page" :current="page" :defaultPageSize=10
+            <a-pagination :default-current="page" :current="page"
                           :total="total" @change="changePage"/>
           </div>
         </div>
@@ -39,29 +39,31 @@ export default {
     await store.dispatch('article/getArticlesList', {
       page: 0,
     })
-    await store.dispatch('tag/getTag')
+    await store.dispatch('classify/getTag')
     await store.dispatch('about/getAuthor',{
       id:1
     })
   },
   data() {
     return {
-      page: 0,
+      page: 1,
     }
   },
   computed: {
     ...mapState('article', ['articleList', 'total', 'loading']),
-    ...mapState('tag', ['tags']),
+    ...mapState('classify', ['tags']),
     ...mapState('about', ['author']),
   },
   mounted() {
     
   },
   methods: {
-    async changePage(){
-      await this.$store.dispatch('article/getArticlesList',{
-        page:this.page
-      })
+    async changePage(val){
+      this.page=val
+      console.log(this.page);
+      // await this.$store.dispatch('article/getArticlesList',{
+      //   page:this.page
+      // })
     }
   },
 }

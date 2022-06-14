@@ -49,7 +49,7 @@ export default {
 @import '~/assets/scss/animation.scss';
 .notScroll {
   position: fixed;
-  right: 50px;
+  right: 30px;
   top: 85%;
   z-index: 9999;
   cursor: pointer;
@@ -70,7 +70,7 @@ export default {
 
 .isScroll {
   position: fixed;
-  right: 50px;
+  right: 30px;
   top: 85%;
   z-index: 9999;
   cursor: pointer;

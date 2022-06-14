@@ -4,7 +4,7 @@
     <div class="header-container flex justify-around sm:justify-between box-border">
 
       <!-- 左侧移动侧边控制按钮 -->
-      <div class="left-menu  flex sm:hidden items-center">
+      <div class="left-menu  flex sm:hidden items-center" @click="toggleleftMenu">
         <span role="img"
               class=" cursor-pointer inline-block text-center align-middle"><svg t="1654598114661"
                class="icon"
@@ -44,14 +44,14 @@
 import tabList from "~/components/layout/nav/tabList.vue"
 export default {
   components: { tabList },
-  data() {
-    return {
-  
-    }
-  },
   computed:{
     isScroll(){
       return this.$store.state.setting.isScroll
+    },
+  },
+  methods:{
+    toggleleftMenu(){
+      this.$store.dispatch('setting/getLeftMenu',true)
     }
   }
 }

@@ -34,7 +34,8 @@ export default {
 <style lang="scss" scoped>
 @import '~/assets/scss/animation.scss';
 .archive-container {
-  margin-top: 60px;
+  transform: translateY(60px);
+  min-height: 86vh;
 }
 
 .archive {

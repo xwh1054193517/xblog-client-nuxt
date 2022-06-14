@@ -14,6 +14,7 @@ export const state = () => ({
     comments: [],
 
     loading: false,
+    starArticles: []
 })
 
 
@@ -35,6 +36,9 @@ export const mutations = {
     setArticleDetail(state, article) {
         state.article = article
     },
+    setStarArticles(state, starArticles) {
+        state.starArticles = starArticles
+    }
 
 
 }
@@ -60,12 +64,14 @@ export const actions = {
     // 获取具体文章内容
     async getArticleDetail({ commit }, params) {
         try {
-
+            commit('setLoading', true)
             const result = await article.getArticleDetail(params)
             result.created_date = Utils.formatTime(result.created_date)
             commit('setArticleDetail', result)
+            commit('setLoading', false)
         } catch (e) {
-            // eslint-disable-next-line no-console
+            commit('setLoading', false)
+                // eslint-disable-next-line no-console
             console.log(e)
         }
     },
@@ -144,6 +150,22 @@ export const actions = {
             commit('setLoading', false)
                 // eslint-disable-next-line no-console
             console.log(e)
+        }
+    },
+
+    // 获取精选文章
+    async getStarArticles({ commit }) {
+        try {
+            commit('setLoading', true)
+            const res = await article.getStarArticles()
+            res.forEach(item => {
+                item.created_date = Utils.formatTime(item.created_date)
+                item.created_date = item.created_date.split(' ')[0]
+            })
+            commit('setStarArticles', res)
+            commit('setLoading', false)
+        } catch (error) {
+            console.log(error);
         }
     }
 

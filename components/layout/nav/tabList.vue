@@ -42,7 +42,7 @@
     </div>
     <div class=" sm:hidden">
       <template>
-        <a-dropdown>
+        <a-dropdown v-model="visible">
           <div class="mobiletab">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </div>
@@ -74,13 +74,14 @@ export default {
 
   data() {
     return {
+      visible:false,
       navList,
       isShowMobileNav: false,
     }
   },
   methods: {
-    onClick({ key }) {
-      console.log(`Click on item ${key}`)
+    onClick(e) {
+      this.visible=false
     },
   },
 }

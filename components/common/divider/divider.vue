@@ -30,6 +30,6 @@ export default {
 .split{
   flex: 1;
   height: 1px;
-  background-color: rgb(30, 30, 30);
+  background-color: rgb(93, 93, 93);
 }
 </style>

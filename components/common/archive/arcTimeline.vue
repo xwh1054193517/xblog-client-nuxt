@@ -6,16 +6,18 @@
         <a-timeline-item v-for="item in archiveTimeline"
                          :key="item.id"
                          :color="color[getRandom()]">
+     <nuxt-link :to="{ name: 'article-id', params: { id: item.id } }">                    
           <div class="timeItem">
             <div class="content">
               <h4 :style="{color:color[getRandom()]}">{{item.title}}</h4>
-              <p :style="{color:color[getRandom()]}">{{item.description}}</p>
+              <p :style="{color:color[(getRandom()+1)%color.length]}">{{item.description}}</p>
               <img src=""
                    alt="">
             </div>
             <div class="time"
-                 :style="{color:color[getRandom()]}">{{item.created_date}}</div>
+                 :style="{color:color[(getRandom()+2)%color.length]}">{{item.created_date}}</div>
           </div>
+     </nuxt-link>
         </a-timeline-item>
       </a-timeline>
     </div>
@@ -55,10 +57,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~/assets/scss/animation.scss';
 .timeItem {
   display: block;
   position: relative;
+  transition: all 0.4s ease;
+  &:hover{
+    transform: translateY(10%);
+  }
 }
 .time {
   border-bottom: 1px dashed;

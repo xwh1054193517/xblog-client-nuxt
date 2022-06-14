@@ -21,6 +21,7 @@ export default {}
 .face-word{
   color: rgba(222, 51, 248, 0.938);
   animation: Fontdance 1s ease 0s infinite normal none;
+  padding-bottom: 10px;
   
 }
 
