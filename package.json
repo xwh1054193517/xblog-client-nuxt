@@ -9,7 +9,8 @@
         "generate": "nuxt generate",
         "lint:prettier": "prettier --check .",
         "lint": "yarn lint:prettier",
-        "lintfix": "prettier --write --list-different ."
+        "lintfix": "prettier --write --list-different .",
+        "deploy": "pm2 start npm --name xblogNuxt -- run start"
     },
     "dependencies": {
         "@nuxtjs/style-resources": "^1.2.1",
@@ -27,6 +28,7 @@
     },
     "devDependencies": {
         "@nuxtjs/tailwindcss": "^4.2.1",
+        "compression-webpack-plugin": "6.0.1",
         "eslint-config-prettier": "^8.3.0",
         "postcss": "^8.4.4",
         "prettier": "^2.5.1",

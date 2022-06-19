@@ -1,4 +1,5 @@
 import path from 'path'
+const CompressionPlugin = require('compression-webpack-plugin');
 export default {
     mode: 'universal',
     server: {
@@ -38,6 +39,7 @@ export default {
                 type: 'text/javascript',
                 src: 'https://xblog-pic-1305549463.cos.ap-guangzhou.myqcloud.com/intersection-polyfill.js'
             },
+
         ],
         meta: [
             { charset: 'utf-8' },
@@ -56,6 +58,8 @@ export default {
         { src: '~/plugins/antd.js' },
         { src: '~/plugins/marked.js' },
         { src: '~/plugins/highlight.js' },
+        { src: '~/plugins/directive.js' },
+        { src: '~/plugins/copy.js', ssr: false },
     ],
 
     components: true,
@@ -75,11 +79,19 @@ export default {
         }
     },
     build: {
+        plugins: [
+            new CompressionPlugin({
+                test: /\.js$|\.html$|\.css/, // 匹配文件名
+                threshold: 10240, // 对超过10kb的数据进行压缩
+                deleteOriginalAssets: false // 是否删除原文件
+            })
+        ],
         transpile: [/ant-design-vue/],
         // analyze: true,
         optimizeCSS: true,
         devtools: false,
         sourceMap: false,
+        productionSourceMap: false,
         terser: {
             parallel: true,
             cache: false,
@@ -91,7 +103,6 @@ export default {
                 sourceMap: false
             }
         },
-        productionSourceMap: false,
         extend(config) {
             config.resolve.alias['@ant-design/icons/lib/dist$'] = path.resolve(__dirname, './plugins/antd-icon.js') // 引入需要的
             config.resolve.alias['@'] = path.resolve(__dirname, '../plugins')
@@ -109,27 +120,28 @@ export default {
         optimization: {
             splitChunks: {
                 chunks: 'all',
-                name: 'vendors',
+                automaticNameDelimiter: '.',
                 minSize: 20000,
-                minChunks: 2,
                 maxAsyncRequests: 7,
                 cacheGroups: {
                     marked: {
-                        name: 'chunk-marked',
-                        test: /[\\/]node_modules[\\/]marked[\\/]/,
-                        minChunks: 2,
-                        chunks: 'all',
-                        priority: 3,
+
+                        test: /[\\/]node_modules[\\/](marked|highlight.js|dompurify)[\\/]/,
+                        name: true,
+                        priority: 20,
                         reuseExistingChunk: true,
                     },
                     antd: {
-                        name: 'chunk-ant-design-vue',
                         test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
-                        minChunks: 2,
-                        chunks: 'all',
-                        priority: 3,
+                        name: true,
+                        priority: 20,
                         reuseExistingChunk: true,
                     },
+                    vendors: {
+                        name: true,
+                        priority: -10,
+                        reuseExistingChunk: true,
+                    }
                 },
             },
         },

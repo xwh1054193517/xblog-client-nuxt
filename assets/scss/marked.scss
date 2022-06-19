@@ -5,7 +5,7 @@
     }
     pre {
         margin: .5em 0;
-        padding: 1em;
+        padding: 0.1em;
         font-size: 85%;
         border-radius: 5px;
         overflow-x: auto;
@@ -30,6 +30,10 @@
     a {
         margin: 0 .3em;
         color: #c678dd;
+    }
+    .anchor-fix {
+        color: #000;
+        cursor: text;
     }
     blockquote {
         padding: 0 1em;

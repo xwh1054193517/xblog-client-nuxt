@@ -1,6 +1,7 @@
 import tag from '~/service/model/tag'
 import article from '~/service/model/article'
 import category from '~/service/model/category'
+import Utils from '~/service/utils/util'
 export const state = () => ({
     tags: [],
     // loading: false,
@@ -49,6 +50,9 @@ export const actions = {
     async getArticles({ commit }, params) {
         try {
             const { articles, total } = await article.getAllArticles(params)
+            articles.forEach(item => {
+                item.created_date = Utils.formatTime(item.created_date)
+            })
             commit('setArticles', { articles, total })
         } catch (e) {
             // eslint-disable-next-line no-console
@@ -59,6 +63,9 @@ export const actions = {
         try {
             commit('setLoading', true)
             const { articles } = await article.getAllArticles(params)
+            articles.forEach(item => {
+                item.created_date = Utils.formatTime(item.created_date)
+            })
             commit('setMoreArticles', { articles })
             commit('setLoading', false)
         } catch (e) {

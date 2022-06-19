@@ -33,7 +33,7 @@
         <div class="article-content">
           <h1 class="content-title title">{{ article.title }}</h1>
           <div class="content-wrapper">
-            <article ref="md" class="markdown" v-html="mdContent"></article>
+            <article ref="md" class="markdown" v-html="mdContent.content"></article>
           </div>
         </div>
 
@@ -99,10 +99,49 @@
         <!-- 评论区域 -->
         <div class="commentArea" ref="commentArea">
           <div class="content">
-            <div class="comment-wrapper"></div>
+            <div class="comment-wrapper">
+              <comment-area></comment-area>
+            </div>
           </div>
         </div>
-
+        <client-only>
+          <span
+           @click="changedivFirst"
+            class="cursor-pointer block text-center align-middle fixed col"
+            ><svg
+              t="1654598114661"
+              class="icon"
+              viewBox="64 64 896 896"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="2211"
+              width="1em"
+              height="1em"
+              focusable="false"
+              aria-hidden="true"
+              fill="currentColor"
+            >
+              <path
+                d="M64 480h352V128H64v352z m64-288h224v224H128V192zM64 928h352V576H64v352z m64-288h224v224H128v-224zM526.848 224H928a32 32 0 1 0 0-64H526.848a32 32 0 0 0 0 64zM928 608H526.848a32 32 0 1 0 0 64H928a32 32 0 1 0 0-64zM928 384H526.848a32 32 0 0 0 0 64H928a32 32 0 1 0 0-64zM928 832H526.848a32 32 0 1 0 0 64H928a32 32 0 1 0 0-64z"
+                p-id="2212"
+                color="rgb(216,112,147"
+              ></path></svg
+          ></span>
+          <div class="toc fixed z-0" v-show="stay">
+            <a-drawer
+              placement="left"
+              :closable="false"
+              :visible="visible"
+              :get-container="false"
+              :wrap-style="{ position: 'absolute' }"
+              @close="change"
+            >
+              <div class="toc">
+                <div v-html="mdContent.toc"></div>
+              </div>
+            </a-drawer>
+          </div>
+        </client-only>
         <aside class="like-aside fixed right-1 bottom-1/4 z-10 shadow-sm hidden sm:block">
           <div class="item" @click="likeArticle">
             <span class="count">{{ like }}</span>
@@ -149,11 +188,12 @@
 
 <script>
 import { mapState } from "vuex";
+import CommentArea from "~/components/common/comment/commentArea.vue";
 import TagItem from "~/components/common/tagItem/tagItem.vue";
 import markdown from "~/plugins/marked";
 
 export default {
-  components: { TagItem },
+  components: { TagItem, CommentArea },
   async fetch({ store, params }) {
     await store.dispatch("article/getArticleDetail", {
       id: params.id,
@@ -164,13 +204,16 @@ export default {
       id: 0,
       likeArticles: [],
       like: 0,
+      visible: false,
+      stay: false,
     };
   },
   computed: {
-    ...mapState("article", ["article", "comment", "loading",'total']),
+    ...mapState("article", ["article", "comment", "loading", "total"]),
     mdContent() {
       if (this.article.content) {
-        return markdown(this.article.content);
+        const res = markdown(this.article.content);
+        return res;
       } else {
         return "";
       }
@@ -196,6 +239,20 @@ export default {
         console.log(error);
       }
     },
+    change() {
+      this.visible = !this.visible;
+      setTimeout(() => {
+        this.stay = !this.stay;
+      }, 500);
+    },
+    changedivFirst() {
+      if (this.stay) {
+        this.change();
+        return;
+      }
+      this.stay = !this.stay;
+      this.visible = !this.visible;
+    },
     ToComment() {},
 
     //从localStorage里查找这篇文章是否已经点赞过
@@ -220,12 +277,52 @@ export default {
     this.like = this.article.like;
   },
   mounted() {
-    this.InitImg()
+    this.InitImg();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.col {
+  bottom: 68%;
+  left: 1.1%;
+  @media (min-width: 640px) {
+    left: 5%;
+  }
+}
+.toc {
+  bottom: 20%;
+  left: 1%;
+  height: 45vh;
+  width: 100%;
+  overflow: hidden;
+  transition: all 0.6s ease;
+  ::v-deep .ant-drawer-mask {
+    background-color: transparent;
+  }
+  ::v-deep .ant-drawer-body {
+    padding: 5px;
+  }
+  @media (min-width: 640px) {
+    left: 8%;
+    height: 50vh;
+  }
+
+  ::v-deep a {
+    color: rgb(163, 56, 240);
+    &:hover {
+      color: peru;
+    }
+  }
+  ::v-deep li.tit1 {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  ::v-deep li.tit2 {
+    font-size: 12px;
+    text-indent: 2em;
+  }
+}
 .item {
   display: flex;
   justify-content: center;

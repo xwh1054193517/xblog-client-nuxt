@@ -31,14 +31,15 @@ export default {
     };
   },
   methods: {
-     onSearch: utils.debounce(function () {
-        console.log(this.keyword);
-      }, 1000)
-
-      // await this.$store.dispatch('article/searchArticles', {
-      //   search: this.keyword,
-      // })
-    
+    onSearch: utils.debounce(async function () {
+      if (!this.keyword) {
+        await this.$store.dispatch("article/getArticlesList", { page: 0 });
+      } else {
+        await this.$store.dispatch("article/searchArticles", { search: this.keyword });
+        console.log(this.$store.state.article.articleList);
+      }
+      this.$emit("reload");
+    }, 1000),
   },
 };
 </script>

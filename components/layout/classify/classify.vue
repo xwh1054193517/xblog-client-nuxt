@@ -33,7 +33,7 @@
 <script>
 import articleItem from "~/components/common/articles/articleItem.vue";
 import { mapState } from "vuex";
-import Loading from '../loading.vue/loading.vue';
+import Loading from '../loading/loading.vue';
 export default {
   components: { articleItem, Loading },
   props: {

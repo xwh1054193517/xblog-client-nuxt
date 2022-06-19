@@ -28,8 +28,10 @@
         </div>
 
         <!-- 图片区域 -->
-        <div class="img-box cursor-pointer rounded-md flex justify-center items-center relative">
-          <img class="w-full" :src="loadingPic" />
+        <div
+          class="img-box cursor-pointer rounded-md flex justify-center items-center relative"
+        >
+          <img class=" w-full" :src="loadingPic" />
           <img
             class="needLazy artPic w-full align-middle top-0 absolute"
             :data-src="article.cover"
@@ -112,6 +114,7 @@
 
 <script>
 import tagItem from "../tagItem/tagItem.vue";
+import { mapState } from "vuex";
 export default {
   components: { tagItem },
   props: {
@@ -122,6 +125,10 @@ export default {
     total: {
       type: Number,
       default: 0,
+    },
+    hasSearch: {
+      type: Number,
+      default: -1,
     },
   },
   data() {
@@ -135,6 +142,15 @@ export default {
         res.default(".needLazy");
       });
     },
+  },
+  watch: {
+    hasSearch() {
+      this.initImg();
+    },
+  },
+  computed: {
+    ...mapState("classify", ["categories"]),
+    
   },
   mounted() {
     this.initImg();
@@ -196,7 +212,7 @@ img {
 .img-box {
   overflow: hidden;
   height: 150px;
-  @media (min-width:640px) {
+  @media (min-width: 640px) {
     height: 260px;
   }
 }

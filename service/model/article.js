@@ -36,6 +36,16 @@ class Article {
         const res = await get('blog/article/star/articles')
         return res
     }
+
+    // 搜索文章
+    async searchArticles(params) {
+        let query = {
+            page: params.page ? params.page : 0,
+            search: params.search
+        }
+        const res = await get('blog/article/search/articles', query)
+        return res
+    }
 }
 
 export default new Article()

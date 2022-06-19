@@ -5,6 +5,7 @@ export const state = () => ({
     articleList: [],
     total: 0,
 
+    keyword: '',
     // 归档
     archive: null,
     archiveTimeline: null,
@@ -38,12 +39,18 @@ export const mutations = {
     },
     setStarArticles(state, starArticles) {
         state.starArticles = starArticles
+    },
+    setKeyword(state, keyword) {
+        state.keyword = keyword
     }
 
 
 }
 
 export const actions = {
+    setKeyword({ commit }, keyword) {
+        commit('setKeyword', keyword)
+    },
     //获取首页文章列表
     async getArticlesList({ commit }, params) {
         try {
@@ -139,11 +146,13 @@ export const actions = {
         }
     },
 
-    //搜索文章
     async searchArticles({ commit }, params) {
         try {
             commit('setLoading', true)
-            const { articles, total } = await article.getAllArticles(params)
+            const { articles, total } = await article.searchArticles(params)
+            articles.forEach(item => {
+                item.created_date = Utils.formatTime(item.created_date)
+            })
             commit('setArticlesList', { articles, total })
             commit('setLoading', false)
         } catch (e) {
