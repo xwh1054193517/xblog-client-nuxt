@@ -69,6 +69,7 @@ const navList = [
   { link: '/archive', name: '归档' },
   { link: '/messageBd', name: '留言' },
   { link: '/about', name: '关于' },
+  {link:'/friend',name:"图墙"}
 ]
 export default {
 

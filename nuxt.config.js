@@ -1,5 +1,6 @@
 import path from 'path'
 const CompressionPlugin = require('compression-webpack-plugin');
+const webpack=require('webpack')
 export default {
     mode: 'universal',
     server: {
@@ -84,6 +85,9 @@ export default {
                 test: /\.js$|\.html$|\.css/, // 匹配文件名
                 threshold: 10240, // 对超过10kb的数据进行压缩
                 deleteOriginalAssets: false // 是否删除原文件
+            }),
+            new webpack.optimize.LimitChunkCountPlugin({
+              maxChunks: 5, // Must be greater than or equal to one
             })
         ],
         transpile: [/ant-design-vue/],
@@ -125,7 +129,6 @@ export default {
                 maxAsyncRequests: 7,
                 cacheGroups: {
                     marked: {
-
                         test: /[\\/]node_modules[\\/](marked|highlight.js|dompurify)[\\/]/,
                         name: true,
                         priority: 20,
@@ -137,11 +140,12 @@ export default {
                         priority: 20,
                         reuseExistingChunk: true,
                     },
-                    vendors: {
+                    common:{
+                        test: /[\\/](pages|components)[\\/]/,
                         name: true,
-                        priority: -10,
+                        priority: 10,
                         reuseExistingChunk: true,
-                    }
+                    },
                 },
             },
         },

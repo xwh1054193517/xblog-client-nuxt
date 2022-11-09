@@ -3,7 +3,8 @@
     <scroll-to-top></scroll-to-top>
     <blog-header></blog-header>
     <nuxt />
-    <blog-footer></blog-footer>
+    <blog-footer>
+    </blog-footer>
     <a-drawer :placement="'left'" :closable="false" :visible="leftMenu" @close="onClose">
       <author-bar :author="author" :tags="tags"></author-bar>
     </a-drawer>
@@ -28,18 +29,22 @@ export default {
     onClose() {
       this.$store.dispatch("setting/getLeftMenu", false);
     },
-  },
-  mounted() {
-    const handler = () => {
+    handler()  {
       let scrollTop = document.documentElement.scrollTop;
       if (scrollTop > 200) {
         this.$store.dispatch("setting/getScroll", true);
       } else {
         this.$store.dispatch("setting/getScroll", false);
       }
-    };
-    window.addEventListener("scroll", utils.debounce(handler, 10));
+    }
   },
+  mounted() {
+    
+    window.addEventListener("scroll", utils.debounce(this.handler, 10));
+  },
+  beforeDestroy(){
+    window.removeEventListener("scroll", utils.debounce(this.handler, 10));
+  }
 };
 </script>
 

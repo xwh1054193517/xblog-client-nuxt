@@ -56,6 +56,7 @@ export const actions = {
         try {
             commit('setLoading', true)
             const { articles, total } = await article.getAllArticles(params)
+            // console.log(articles,total)
             articles.forEach(item => {
                 item.created_date = Utils.formatTime(item.created_date)
             })

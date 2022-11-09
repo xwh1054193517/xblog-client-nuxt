@@ -1,6 +1,5 @@
 import Vue from 'vue'
 Vue.directive('debounce', {
-
     inserted: function(el, binding, vnode) {
         const { fn, delay = 2000, immediate = false } = binding.value
         let timer = null

@@ -23,12 +23,14 @@
       </div>
       <!-- 博客标题logo -->
       <div class="blog-title flex justify-center items-center  flex-nowrap">
+        <a href="http://106.13.211.96/admin" target="_blank" >
         <div class="blog-tit font-bold text-purple-600 text-lg"
-             title="后台管理入口">
+             title="后台管理入口" >
           XuWenHao
           <span role="img"
                 aria-label="logo">🍀</span>
         </div>
+        </a>
         <div class="sentence text-xs mt-2 ml-2 text-yellow-900 hidden md:block">不曾扬帆，何以至远方</div>
       </div>
 

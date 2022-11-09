@@ -2,14 +2,18 @@
   <div class="main-body w-full flex justify-center items-start box-border">
     <!-- 版心左侧部分 -->
     <div class="left-Article w-full sm:w-2/3 md:w-7/12 rounded-md bg-white bg-opacity-50">
+      <!-- <swiper :sliders="starArticles"></swiper> -->
+      <div class="swiper">
+      <swiper2 :list='swiperArr' :autoplay="true" :type="'transparent'" :option="true" :direction="'left'"></swiper2>
+    </div>
       <a-spin :spinning="loading" size="large" class="relative">
         <div class="article-container py-4">
           <article-header :total="total" @reload="reloadPic"></article-header>
           <article-item
             ref="arcItem"
-            v-for="(item, index) in articleList"
+            v-for="(item) in articleList"
             :article="item"
-            :key="index"
+            :key="item.id"
             :hasSearch="search"
           ></article-item>
           <div class="pagination flex justify-center items-center">
@@ -37,9 +41,11 @@
 import ArticleHeader from "~/components/common/articles/articleHeader.vue";
 import articleItem from "~/components/common/articles/articleItem.vue";
 import AuthorBar from "~/components/common/other/author-bar.vue";
+// import swiper from "~/components/common/swiper/index.vue"
+import swiper2 from "~/components/common/swiper/other.vue"
 import { mapState } from "vuex";
 export default {
-  components: { articleItem, AuthorBar, ArticleHeader },
+  components: { articleItem, AuthorBar, ArticleHeader,swiper2 },
 
   name: "IndexPage",
   async fetch({ store, params }) {
@@ -51,25 +57,35 @@ export default {
     await store.dispatch("about/getAuthor", {
       id: 1,
     });
+    await store.dispatch("article/getStarArticles");
   },
   data() {
     return {
       page: 1,
       search: -1,
+      swiperArr:[]
     };
   },
   computed: {
-    ...mapState("article", ["articleList", "total", "loading", "keyword"]),
+    ...mapState("article", ["articleList", "total", "loading", "keyword","starArticles"]),
     ...mapState("classify", ["tags"]),
     ...mapState("about", ["author"]),
   },
-  mounted() {},
+  mounted() {
+    this.swiperArr=this.starArticles.slice().map(item=>{
+      return {
+        url:"src",
+        src:item.cover,
+        title:item.title,
+        id:item.id
+      }
+    })
+  },
   methods: {
     async changePage(val) {
       this.page = val;
-      console.log(this.page);
       await this.$store.dispatch("article/getArticlesList", {
-        page: this.page,
+        page: this.page-1,
         search: this.keyword,
       });
     },
@@ -99,5 +115,11 @@ export default {
 
 .pagination {
   padding: 15px 0;
+}
+
+.swiper{
+  width:100%;
+  // height:400px;  
+  overflow: hidden;
 }
 </style>
